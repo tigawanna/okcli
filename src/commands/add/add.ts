@@ -1,7 +1,10 @@
 
 import { Command } from "commander";
-import { printHelpers } from "#/src/utils/helpers/print-tools";
-import { add_command_args, add_command_options } from "./add-commnad-args";
+import { TAddArgs, TAddOptions, add_command_args, add_command_options } from "./add-commnad-args";
+import { multiselectPrompt, textPrompt } from "#/src/utils/helpers/clack/prompts";
+import { TOkCliConfigSchema, getOkCliConfig, promptForOkCliConfig } from "#/src/utils/config/okcli";
+import { installTailwind } from "./installers/tw/tailwind";
+
 
 
 const program = new Command();
@@ -16,44 +19,57 @@ export const addCommand = program
   .option("-p, --plugins <plugins...>", "Plugins")
   .option("-y, --yes", "Accept all defaults", false)
   .action(async (args,opts) => {
-    // const config = await getBonitaConfig();
-  const add_args = await add_command_args(args)
-  const add_options = await add_command_options(opts) 
+    const add_args = await add_command_args(args)
+    const add_options = await add_command_options(opts) 
+    
+    const configure={
+      root_dir:await textPrompt({
+        message: "Root dir ?",
+        defaultValue: "./src",
+        initialValue: "./src",
+      }),
+    main_file:await textPrompt({
+        message: "Main file ?",
+        defaultValue: "main.tsx",
+        initialValue: "main.tsx",
+      }),
+    css_file:await textPrompt({
+        message: "Styles file ?",
+        defaultValue: "index.css",
+        initialValue: "index.css",
+      })      
+    }
+    
 
-  // printHelpers.success("add command with args", args)
-  // printHelpers.success("add_args", add_args)
-  // printHelpers.success("add_options", add_options)
-  // printHelpers.debug("add command with options", options)
+
+    console.log({configure})
+    const config = await getOkCliConfig(add_options)
+
+    // const config = await promptForOkCliConfig()
+    // const config = await validateRootOptions(add_options)
+    console.log("config gotten ===  ",config)
+    // if (add_args.includes("tailwind")) {
+    //   await installTailwind(config);
+    // }
+});
 
 
-
-
+export async function listAddablePackages(config: TOkCliConfigSchema, add_options?: TAddOptions) {
+  const result = await multiselectPrompt<TAddArgs[number]>({
+    /* REQUIRED OPTIONS */
+    message: "Which packages would you like to add?", // The message that the user will read
+    options: [
+      { label: "TailwindCSS", value: "tailwind" },
+    ]
   });
 
+  const packages = result && result;
+  if (packages) {
+    if (packages.includes("tailwind")) {
+      await installTailwind(config);
+    }
 
+    // await promptToInstall(add_options)
+  }
+}
 
-//   export async function listAddablePackages(config: TOkCliConfigSchema,add_options?:TAddOptions) {
-//   const result = await multiselectPrompt<TAddArgs[number]>({
-//     /* REQUIRED OPTIONS */
-//     message: "Which packages would you like to add?", // The message that the user will read
-//     options: [
-//       { label: "TailwindCSS", value: "tailwind" },
-//       { label: "PandaCSS", value: "panda" },
-//       { label: "Tanstack", value: "tanstack" },
-//     ]
-//   });
-
-//   const packages = result && result;
-//   if (packages) {
-//     // if (packages.includes("tailwind")) {
-//     //   await installTailwind(config);
-//     // }
-//     // if (packages.includes("panda")) {
-//     //   await installPanda(config);
-//     // }
-//     // if (packages.includes("tanstack")) {
-//     //   await installTanstack(config,add_options);
-//     // }
-//     await promptToInstall(add_options)
-//   }
-// }

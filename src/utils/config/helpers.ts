@@ -15,7 +15,7 @@ export async function saveConfig(config: TOkCliConfigSchema) {
   writeFile("./okcli.config.json", JSON.stringify(config, null, 2)).catch(
     (err) => {
       printHelpers.error("error saving config ", err.message);
-      printHelpers.warning("Bonita config :", config);
+      printHelpers.warning("config :", config);
       save_config_loader.fail("saved config",{text:"error saving config " + err.message});
     },
   );

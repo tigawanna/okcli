@@ -20,6 +20,7 @@ const addOptionsSchema = z.object({
   // /src/index.css
   rootStyles: z.string().optional(),
   // /src/main.tsx
+  twConfig: z.string().default("tailwind.config.js").optional(),
   rootFile: z.string().optional(),
    plugins: z.array(z.string()).default([]).optional(),
   yes:z.boolean().default(false).optional(),
@@ -28,6 +29,7 @@ const addOptionsSchema = z.object({
 
 export type TAddOptions = z.infer<typeof addOptionsSchema>;
 export async function add_command_options(options: any) {
+  printHelpers.info("add command options", options);
   try {
     const parsed_options = await addOptionsSchema.parse(options);
     // printHelpers.success("add command opts succecssfully parsed", parsed_options)

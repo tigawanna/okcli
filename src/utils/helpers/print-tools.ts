@@ -67,16 +67,21 @@ export function warning(message: any, content?: any, legacy = false) {
      }else{
     s.stop(kleur.yellow(message + " " +warn), 0);
  }
-
-
 }
 }
 
-export function info(message: any, content?: any) {
-  if (content) {
-    console.log(kleur.cyan(message), content);
+export function info(message: any, content?: any, legacy = false) {
+  if (legacy) {
+    console.log(kleur.yellow("---" + message + "--- "));
+    content && console.log(content);
   } else {
-    console.log(kleur.cyan(message));
+    const s = spinner();
+    s.start(kleur.yellow(message));
+    if (content){
+      s.stop(kleur.yellow("---"+message + "--- "  + "\n" + JSON.stringify(content, null, 2)), 0);
+    }else{
+      s.stop(kleur.yellow("--" + message + "--"), 0);
+    }
   }
 
   // content && console.log(content);

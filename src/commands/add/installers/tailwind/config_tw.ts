@@ -62,12 +62,8 @@ export async function addTailwindDeps(config: TOkCliConfigSchema) {
     pkg_json.devDependencies = new_dev_deps;
 
     await writeFile("./package.json", JSON.stringify(pkg_json, null, 2), "utf8");
-    spinnies.succeed("adding_deps", {
-      text:
-        "added tailwind deps \n " +
-        "  rememnder to import your css into your root file: " +
-        config.root_file,
-    });
+    spinnies.succeed("adding_deps", {text:"added tailwind deps"});
+    printHelpers.info("rememnder to import your css into your root file: " +config.root_file)
   } catch (error: any) {
     spinnies.fail("adding_deps", { text: error.message });
     throw error;
@@ -82,7 +78,6 @@ export async function addTailwindConfig(bonita_config: TOkCliConfigSchema) {
     const tw_config_path = validateRelativePath(config.tailwind?.tw_config);
     const tw_plugins = config.tailwind?.tw_plugins;
     spinner.add("tw_config", { text: "adding tailwind config..." });
-
     if (tw_plugins && tw_plugins?.length > 0) {
       const tw_config_with_plugins = updateTwPlugins(tw_plugins);
       await writeFile(tw_config_path, tw_config_with_plugins);

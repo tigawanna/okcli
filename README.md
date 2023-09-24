@@ -27,49 +27,31 @@ pnpm dlx okcli add tailwind
 
 This command currently works for 
 - tailwind
-- pandacss
-- tanstack
+
 
 Currently supported frameworks:
-### React
+- React
     - Vite SPA
     - Next.js
     - Redwood
     - Rakkasjs
 
-running 
-```sh
-okcli add tanstack
+
+options:
+
+```ts
+  .option("-d, --root-dir <root_dir>", "Root directory")
+  .option("-s, --root-styles <root_styles>", "Root styles file")
+  .option("-f, --root-file <root_file>", "Root file",)
+  .option("-tw, --tw-config <tw_config>", "tailwind config path",)
+  .option("-p, --plugins <plugins...>", "Plugins")
+  .option("-y, --yes", "Accept all defaults", false)
 ```
-In Nextjs or rakkas will only add tanstack query ,and will add query + router in vite SPA
-
-### okcli gen
- sub commands 
- - route : generate a route , which will create boilerplate for
-   - The route directory
-   - a layout file
-   - a route file
-   - a dynamic route file
-
+ex:
 ```sh
-okcli gen route Route1 Route2
+okcli add tailwind -y --root-dir ./src --root-file ./src/main.tsx --root-styles ./src/index.css  --plugins daisyui --tw-config tailwind.config.js
 ```
 
-example
-```sh
-pnpm okcli gen route user about
-```
-to generate the user and about routes
-
-
-
--  model: 🚧
-
-
-
-### okcli create 🚧
-
-Currentlt only supports rakkasjs 
-- Rakkasjs will pull in a [trpc + prisma + tailwind + typescript template](https://github.com/tigawanna/trpc-rakkas.git) for now , fine grained choice might be added later
+passing in all the options will bypass the prompts , if a required option is missing it will propmpt for it
 
 

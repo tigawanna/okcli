@@ -96,34 +96,61 @@ export async function getOkCliConfigOrPrompt({
           framework: framework_type,
         };
 
-  if (!config_partial?.root_dir) {
-    printHelpers.warning("missing root directory");
-    config_partial.root_dir = await textPrompt({
-      message: "root directory ?",
-      defaultValue: root_dir,
-      initialValue: root_dir,
-    });
-  }
-  if (!config_partial?.root_file) {
-    printHelpers.warning("missing root/entry file");
-    config_partial.root_file = await textPrompt({
-      message: "root/entry file ?",
-      defaultValue: root_file,
-      initialValue: root_file,
-    });
-  }
-  if (!config_partial?.root_styles) {
-    printHelpers.warning("missing main css file");
-    config_partial.root_styles = await textPrompt({
-      message: "Main css file ?",
-      defaultValue: root_styles,
-      initialValue: root_styles,
-    });
-  }
+  // if (!config_partial?.root_dir) {
+  //   printHelpers.warning("missing root directory");
+  //   config_partial.root_dir = await textPrompt({
+  //     message: "root directory ?",
+  //     defaultValue: root_dir,
+  //     initialValue: root_dir,
+  //   });
+  // }
+  // if (!config_partial?.root_file) {
+  //   printHelpers.warning("missing root/entry file");
+  //   config_partial.root_file = await textPrompt({
+  //     message: "root/entry file ?",
+  //     defaultValue: root_file,
+  //     initialValue: root_file,
+  //   });
+  // }
+  // if (!config_partial?.root_styles) {
+  //   printHelpers.warning("missing main css file");
+  //   config_partial.root_styles = await textPrompt({
+  //     message: "Main css file ?",
+  //     defaultValue: root_styles,
+  //     initialValue: root_styles,
+  //   });
+  // }
 
-  if (!framework_type) {
-    printHelpers.warning("framework type misiing ");
-    config_partial.framework = (await selectPrompt({
+  // if (!framework_type) {
+  //   printHelpers.warning("framework type misiing ");
+  //   config_partial.framework = (await selectPrompt({
+  //     message: "Framework ?",
+  //     options: [
+  //       { value: "React+Vite", label: "React+Vite" },
+  //       { value: "Nextjs", label: "Nextjs" },
+  //       { value: "RedWood", label: "RedWood" },
+  //       { value: "Rakkasjs", label: "Rakkasjs" },
+  //     ],
+  //   })) as TFrameworkType;
+  // }
+
+  return {
+    root_dir: config_partial?.root_dir ?? await textPrompt({
+      message: "root directory ?",
+      // defaultValue: root_dir,
+      initialValue: root_dir,
+    }),
+    root_file: config_partial?.root_file ?? await textPrompt({
+      message: "root/entry file ?",
+      // defaultValue: root_file,
+      initialValue: root_file,
+    }),
+    root_styles: config_partial?.root_styles?? await textPrompt({
+      message: "Main css file ?",
+      // defaultValue: root_styles,
+      initialValue: root_styles,
+    }),
+    framework: config_partial.framework ?? (await selectPrompt({
       message: "Framework ?",
       options: [
         { value: "React+Vite", label: "React+Vite" },
@@ -131,14 +158,7 @@ export async function getOkCliConfigOrPrompt({
         { value: "RedWood", label: "RedWood" },
         { value: "Rakkasjs", label: "Rakkasjs" },
       ],
-    })) as TFrameworkType;
-  }
-
-  return {
-    root_dir: config_partial?.root_dir,
-    root_file: config_partial?.root_file,
-    root_styles: config_partial?.root_styles,
-    framework: config_partial.framework!,
+    })) as TFrameworkType
   };
 
   // return await getSavedOkCliConfig(config_partial);

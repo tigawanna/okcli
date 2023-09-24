@@ -22,12 +22,12 @@ export function loadingSpinner() {
      
         print_success: (id = "print_succeed", { text = "task success" }) => {
             s.start(kleur.yellow(text));
-            s.stop(kleur.cyan(text)+printHelpers.checkmark, 1);
+            s.stop(kleur.cyan(text)+printHelpers.checkmark, 0);
         },
 
         print_error: (id = "print_fail", { text = "task fail" }) => {
             s.start(kleur.yellow(text));
-            s.stop(kleur.red(text) + printHelpers.xmark, 0);
+            s.stop(kleur.red(text) + printHelpers.xmark, 1);
         }
     }
 }

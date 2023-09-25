@@ -1,7 +1,8 @@
 import { detect } from "@antfu/ni";
-import { execa } from "execa";
+import { Options, execa } from "execa";
 import { printHelpers } from "../print-tools";
 import { loadingSpinner } from "../clack/spinner";
+import { ExecOptions, exec,execSync } from "child_process";
 
 
 export async function getPackageManager(
@@ -70,14 +71,14 @@ export async function installPackages(packages: string[]) {
  * will execute p/npm/yarn/bun tsc --init
  * @return {Promise<void>} - A promise that resolves when the command is executed successfully.
  */
-export async function execPackageManagerCommand(input: string[]) {
+export async function execPackageManagerCommand(input: string[], options?: Options<"utf8"> | undefined) {
   try {
     const packageManager = await getPackageManager("./");
     const executing_spinners = loadingSpinner();
     executing_spinners.add("main", {
       text: packageExecCommand(packageManager) + " " + input.join(" "),
     });
-    await execa(packageExecCommand(packageManager), [...input])
+    await execa(packageExecCommand(packageManager), [...input],options)
       .then((res) => {
         executing_spinners.succeed("main", { text: res.command });
         printHelpers.info(res.command);
@@ -95,4 +96,17 @@ export async function execPackageManagerCommand(input: string[]) {
 
 
 
-
+export async function execCommandWithliveStdio(command: string, options: ExecOptions){
+  try {
+    await exec(command,options
+      , (err, stdout, stderr) => {
+        if (err) {
+          // printHelpers.error("eerror execing "+command+"\n"+err);
+          throw err
+        }
+      })
+      .stdout?.pipe(process.stdout)
+  } catch (error) {
+    throw new Error("error execing "+command+"\n"+error);
+  }
+}

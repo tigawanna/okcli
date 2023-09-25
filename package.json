@@ -24,6 +24,8 @@
   ],
   "scripts": {
     "start": "node ./dist/index.cjs",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
     "build": "tsup",
     "dev": "tsup --watch",
     "pretty": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
